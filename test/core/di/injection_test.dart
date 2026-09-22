@@ -12,10 +12,16 @@ import 'package:crm_mobile/features/orders/domain/repositories/orders_repository
 import 'package:crm_mobile/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:crm_mobile/features/pos_checkout/presentation/bloc/cart_bloc.dart';
 import 'package:crm_mobile/features/pos_checkout/presentation/bloc/checkout_bloc.dart';
+import 'package:crm_mobile/features/expenses/data/datasources/expenses_remote_data_source.dart';
+import 'package:crm_mobile/features/expenses/domain/repositories/expenses_repository.dart';
+import 'package:crm_mobile/features/expenses/presentation/bloc/expenses_bloc.dart';
 import 'package:crm_mobile/features/products/data/datasources/products_remote_data_source.dart';
 import 'package:crm_mobile/features/products/domain/repositories/product_repository.dart';
 import 'package:crm_mobile/features/products/presentation/bloc/products_bloc.dart';
 import 'package:crm_mobile/features/products/presentation/bloc/scanner_cubit.dart';
+import 'package:crm_mobile/features/sellers/data/datasources/sellers_remote_data_source.dart';
+import 'package:crm_mobile/features/sellers/domain/repositories/sellers_repository.dart';
+import 'package:crm_mobile/features/sellers/presentation/bloc/sellers_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -51,6 +57,12 @@ void main() {
       expect(sl.isRegistered<CartBloc>(), isTrue);
       expect(sl.isRegistered<CheckoutBloc>(), isTrue);
       expect(sl.isRegistered<OrdersBloc>(), isTrue);
+      expect(sl.isRegistered<ExpensesRemoteDataSource>(), isTrue);
+      expect(sl.isRegistered<ExpensesRepository>(), isTrue);
+      expect(sl.isRegistered<ExpensesBloc>(), isTrue);
+      expect(sl.isRegistered<SellersRemoteDataSource>(), isTrue);
+      expect(sl.isRegistered<SellersRepository>(), isTrue);
+      expect(sl.isRegistered<SellersBloc>(), isTrue);
       expect(sl.isRegistered<AppRouter>(), isTrue);
 
       expect(sl<TokenStorage>(), isA<TokenStorage>());
@@ -70,6 +82,12 @@ void main() {
       expect(sl<CartBloc>(), isA<CartBloc>());
       expect(sl<CheckoutBloc>(), isA<CheckoutBloc>());
       expect(sl<OrdersBloc>(), isA<OrdersBloc>());
+      expect(sl<ExpensesRemoteDataSource>(), isA<ExpensesRemoteDataSource>());
+      expect(sl<ExpensesRepository>(), isA<ExpensesRepository>());
+      expect(sl<ExpensesBloc>(), isA<ExpensesBloc>());
+      expect(sl<SellersRemoteDataSource>(), isA<SellersRemoteDataSource>());
+      expect(sl<SellersRepository>(), isA<SellersRepository>());
+      expect(sl<SellersBloc>(), isA<SellersBloc>());
       expect(sl<AppRouter>(), isA<AppRouter>());
     });
 

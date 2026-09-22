@@ -26,6 +26,7 @@ abstract final class ApiEndpoints {
 
   // Expenses (Owner only)
   static const String expenses = '/api/v1/expenses';
+  static String expenseById(String id) => '/api/v1/expenses/$id';
 
   // Orders & POS
   static const String orders = '/api/v1/orders';

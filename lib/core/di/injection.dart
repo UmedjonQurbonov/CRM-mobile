@@ -17,11 +17,19 @@ import '../../features/orders/domain/repositories/orders_repository.dart';
 import '../../features/orders/presentation/bloc/orders_bloc.dart';
 import '../../features/pos_checkout/presentation/bloc/cart_bloc.dart';
 import '../../features/pos_checkout/presentation/bloc/checkout_bloc.dart';
+import '../../features/expenses/data/datasources/expenses_remote_data_source.dart';
+import '../../features/expenses/data/repositories/expenses_repository_impl.dart';
+import '../../features/expenses/domain/repositories/expenses_repository.dart';
+import '../../features/expenses/presentation/bloc/expenses_bloc.dart';
 import '../../features/products/data/datasources/products_remote_data_source.dart';
 import '../../features/products/data/repositories/product_repository_impl.dart';
 import '../../features/products/domain/repositories/product_repository.dart';
 import '../../features/products/presentation/bloc/products_bloc.dart';
 import '../../features/products/presentation/bloc/scanner_cubit.dart';
+import '../../features/sellers/data/datasources/sellers_remote_data_source.dart';
+import '../../features/sellers/data/repositories/sellers_repository_impl.dart';
+import '../../features/sellers/domain/repositories/sellers_repository.dart';
+import '../../features/sellers/presentation/bloc/sellers_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -159,7 +167,49 @@ Future<void> initDependencies({String? baseUrl}) async {
     );
   }
 
-  // 7. Navigation & Router
+  // 7. Feature: Expenses (Owner only)
+  if (!sl.isRegistered<ExpensesRemoteDataSource>()) {
+    sl.registerLazySingleton<ExpensesRemoteDataSource>(
+      () => ExpensesRemoteDataSourceImpl(client: sl<DioClient>()),
+    );
+  }
+
+  if (!sl.isRegistered<ExpensesRepository>()) {
+    sl.registerLazySingleton<ExpensesRepository>(
+      () => ExpensesRepositoryImpl(
+        remoteDataSource: sl<ExpensesRemoteDataSource>(),
+      ),
+    );
+  }
+
+  if (!sl.isRegistered<ExpensesBloc>()) {
+    sl.registerFactory<ExpensesBloc>(
+      () => ExpensesBloc(expensesRepository: sl<ExpensesRepository>()),
+    );
+  }
+
+  // 8. Feature: Sellers (Owner only)
+  if (!sl.isRegistered<SellersRemoteDataSource>()) {
+    sl.registerLazySingleton<SellersRemoteDataSource>(
+      () => SellersRemoteDataSourceImpl(client: sl<DioClient>()),
+    );
+  }
+
+  if (!sl.isRegistered<SellersRepository>()) {
+    sl.registerLazySingleton<SellersRepository>(
+      () => SellersRepositoryImpl(
+        remoteDataSource: sl<SellersRemoteDataSource>(),
+      ),
+    );
+  }
+
+  if (!sl.isRegistered<SellersBloc>()) {
+    sl.registerFactory<SellersBloc>(
+      () => SellersBloc(sellersRepository: sl<SellersRepository>()),
+    );
+  }
+
+  // 9. Navigation & Router
   if (!sl.isRegistered<AppRouter>()) {
     sl.registerLazySingleton<AppRouter>(
       () => AppRouter(authBloc: sl<AuthBloc>()),
