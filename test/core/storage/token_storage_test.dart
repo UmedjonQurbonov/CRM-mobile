@@ -72,7 +72,7 @@ void main() {
       ).called(1);
     });
 
-    test('clearTokens removes access and refresh tokens', () async {
+    test('clearTokens removes access token, refresh token, and user profile', () async {
       when(
         () => mockSecureStorage.delete(key: any(named: 'key')),
       ).thenAnswer((_) async {});
@@ -84,6 +84,36 @@ void main() {
       ).called(1);
       verify(
         () => mockSecureStorage.delete(key: StorageKeys.refreshToken),
+      ).called(1);
+      verify(
+        () => mockSecureStorage.delete(key: StorageKeys.userProfile),
+      ).called(1);
+    });
+
+    test('saveUserProfile and getUserProfile store and retrieve json profile', () async {
+      const userJson = '{"id":"1","name":"Test"}';
+      when(
+        () => mockSecureStorage.write(
+          key: StorageKeys.userProfile,
+          value: userJson,
+        ),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockSecureStorage.read(key: StorageKeys.userProfile),
+      ).thenAnswer((_) async => userJson);
+
+      await tokenStorage.saveUserProfile(userJson);
+      final result = await tokenStorage.getUserProfile();
+
+      expect(result, userJson);
+      verify(
+        () => mockSecureStorage.write(
+          key: StorageKeys.userProfile,
+          value: userJson,
+        ),
+      ).called(1);
+      verify(
+        () => mockSecureStorage.read(key: StorageKeys.userProfile),
       ).called(1);
     });
 

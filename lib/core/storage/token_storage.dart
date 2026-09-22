@@ -30,11 +30,22 @@ class TokenStorage {
     return _secureStorage.read(key: StorageKeys.refreshToken);
   }
 
-  /// Deletes access and refresh tokens (e.g., on logout or 401 unauthenticated).
+  /// Persists serialized user profile JSON.
+  Future<void> saveUserProfile(String userJson) async {
+    await _secureStorage.write(key: StorageKeys.userProfile, value: userJson);
+  }
+
+  /// Retrieves serialized user profile JSON if available.
+  Future<String?> getUserProfile() async {
+    return _secureStorage.read(key: StorageKeys.userProfile);
+  }
+
+  /// Deletes access and refresh tokens and cached user session (e.g., on logout or 401 unauthenticated).
   Future<void> clearTokens() async {
     await Future.wait([
       _secureStorage.delete(key: StorageKeys.accessToken),
       _secureStorage.delete(key: StorageKeys.refreshToken),
+      _secureStorage.delete(key: StorageKeys.userProfile),
     ]);
   }
 

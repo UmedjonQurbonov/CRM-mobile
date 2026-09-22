@@ -5,4 +5,5 @@ abstract final class StorageKeys {
   static const String deviceId = 'auth_device_id';
   static const String userRole = 'auth_user_role';
   static const String userId = 'auth_user_id';
+  static const String userProfile = 'auth_user_profile';
 }

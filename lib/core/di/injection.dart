@@ -5,7 +5,12 @@ import '../constants/api_endpoints.dart';
 import '../network/auth_event_bus.dart';
 import '../network/auth_interceptor.dart';
 import '../network/dio_client.dart';
+import '../router/app_router.dart';
 import '../storage/token_storage.dart';
+import '../../features/auth/data/datasources/auth_remote_data_source.dart';
+import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/auth/presentation/bloc/auth_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -58,6 +63,38 @@ Future<void> initDependencies({String? baseUrl}) async {
 
   if (!sl.isRegistered<Dio>()) {
     sl.registerLazySingleton<Dio>(() => sl<DioClient>().dio);
+  }
+
+  // 4. Feature: Auth
+  if (!sl.isRegistered<AuthRemoteDataSource>()) {
+    sl.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(client: sl<DioClient>()),
+    );
+  }
+
+  if (!sl.isRegistered<AuthRepository>()) {
+    sl.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(
+        remoteDataSource: sl<AuthRemoteDataSource>(),
+        tokenStorage: sl<TokenStorage>(),
+      ),
+    );
+  }
+
+  if (!sl.isRegistered<AuthBloc>()) {
+    sl.registerLazySingleton<AuthBloc>(
+      () => AuthBloc(
+        authRepository: sl<AuthRepository>(),
+        authEventBus: sl<AuthEventBus>(),
+      ),
+    );
+  }
+
+  // 5. Navigation & Router
+  if (!sl.isRegistered<AppRouter>()) {
+    sl.registerLazySingleton<AppRouter>(
+      () => AppRouter(authBloc: sl<AuthBloc>()),
+    );
   }
 }
 
