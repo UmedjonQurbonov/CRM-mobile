@@ -4,6 +4,9 @@ import 'core/di/injection.dart';
 import 'core/router/app_router.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/orders/presentation/bloc/orders_bloc.dart';
+import 'features/pos_checkout/presentation/bloc/cart_bloc.dart';
+import 'features/pos_checkout/presentation/bloc/checkout_bloc.dart';
 
 /// Main application widget configuring router and global providers.
 class CrmApp extends StatelessWidget {
@@ -11,8 +14,21 @@ class CrmApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>.value(
-      value: sl<AuthBloc>()..add(const AuthCheckRequested()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>.value(
+          value: sl<AuthBloc>()..add(const AuthCheckRequested()),
+        ),
+        BlocProvider<CartBloc>.value(
+          value: sl<CartBloc>(),
+        ),
+        BlocProvider<CheckoutBloc>(
+          create: (_) => sl<CheckoutBloc>(),
+        ),
+        BlocProvider<OrdersBloc>(
+          create: (_) => sl<OrdersBloc>(),
+        ),
+      ],
       child: MaterialApp.router(
         title: 'Retail POS',
         debugShowCheckedModeBanner: false,

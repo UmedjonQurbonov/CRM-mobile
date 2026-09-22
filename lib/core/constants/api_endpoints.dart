@@ -29,6 +29,7 @@ abstract final class ApiEndpoints {
 
   // Orders & POS
   static const String orders = '/api/v1/orders';
+  static String orderById(String id) => '/api/v1/orders/$id';
   static String orderRefund(String orderId) => '/api/v1/orders/$orderId/refund';
 
   // Products & Inventory

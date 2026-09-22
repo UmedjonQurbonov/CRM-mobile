@@ -11,6 +11,12 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/orders/data/datasources/orders_remote_data_source.dart';
+import '../../features/orders/data/repositories/orders_repository_impl.dart';
+import '../../features/orders/domain/repositories/orders_repository.dart';
+import '../../features/orders/presentation/bloc/orders_bloc.dart';
+import '../../features/pos_checkout/presentation/bloc/cart_bloc.dart';
+import '../../features/pos_checkout/presentation/bloc/checkout_bloc.dart';
 import '../../features/products/data/datasources/products_remote_data_source.dart';
 import '../../features/products/data/repositories/product_repository_impl.dart';
 import '../../features/products/domain/repositories/product_repository.dart';
@@ -122,7 +128,38 @@ Future<void> initDependencies({String? baseUrl}) async {
     );
   }
 
-  // 6. Navigation & Router
+  // 6. Feature: Orders & POS Checkout
+  if (!sl.isRegistered<OrdersRemoteDataSource>()) {
+    sl.registerLazySingleton<OrdersRemoteDataSource>(
+      () => OrdersRemoteDataSourceImpl(client: sl<DioClient>()),
+    );
+  }
+
+  if (!sl.isRegistered<OrdersRepository>()) {
+    sl.registerLazySingleton<OrdersRepository>(
+      () => OrdersRepositoryImpl(
+        remoteDataSource: sl<OrdersRemoteDataSource>(),
+      ),
+    );
+  }
+
+  if (!sl.isRegistered<CartBloc>()) {
+    sl.registerLazySingleton<CartBloc>(() => CartBloc());
+  }
+
+  if (!sl.isRegistered<CheckoutBloc>()) {
+    sl.registerFactory<CheckoutBloc>(
+      () => CheckoutBloc(ordersRepository: sl<OrdersRepository>()),
+    );
+  }
+
+  if (!sl.isRegistered<OrdersBloc>()) {
+    sl.registerFactory<OrdersBloc>(
+      () => OrdersBloc(ordersRepository: sl<OrdersRepository>()),
+    );
+  }
+
+  // 7. Navigation & Router
   if (!sl.isRegistered<AppRouter>()) {
     sl.registerLazySingleton<AppRouter>(
       () => AppRouter(authBloc: sl<AuthBloc>()),

@@ -7,6 +7,11 @@ import 'package:crm_mobile/core/storage/token_storage.dart';
 import 'package:crm_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:crm_mobile/features/auth/domain/repositories/auth_repository.dart';
 import 'package:crm_mobile/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:crm_mobile/features/orders/data/datasources/orders_remote_data_source.dart';
+import 'package:crm_mobile/features/orders/domain/repositories/orders_repository.dart';
+import 'package:crm_mobile/features/orders/presentation/bloc/orders_bloc.dart';
+import 'package:crm_mobile/features/pos_checkout/presentation/bloc/cart_bloc.dart';
+import 'package:crm_mobile/features/pos_checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:crm_mobile/features/products/data/datasources/products_remote_data_source.dart';
 import 'package:crm_mobile/features/products/domain/repositories/product_repository.dart';
 import 'package:crm_mobile/features/products/presentation/bloc/products_bloc.dart';
@@ -41,6 +46,11 @@ void main() {
       expect(sl.isRegistered<ProductRepository>(), isTrue);
       expect(sl.isRegistered<ProductsBloc>(), isTrue);
       expect(sl.isRegistered<ScannerCubit>(), isTrue);
+      expect(sl.isRegistered<OrdersRemoteDataSource>(), isTrue);
+      expect(sl.isRegistered<OrdersRepository>(), isTrue);
+      expect(sl.isRegistered<CartBloc>(), isTrue);
+      expect(sl.isRegistered<CheckoutBloc>(), isTrue);
+      expect(sl.isRegistered<OrdersBloc>(), isTrue);
       expect(sl.isRegistered<AppRouter>(), isTrue);
 
       expect(sl<TokenStorage>(), isA<TokenStorage>());
@@ -55,6 +65,11 @@ void main() {
       expect(sl<ProductRepository>(), isA<ProductRepository>());
       expect(sl<ProductsBloc>(), isA<ProductsBloc>());
       expect(sl<ScannerCubit>(), isA<ScannerCubit>());
+      expect(sl<OrdersRemoteDataSource>(), isA<OrdersRemoteDataSource>());
+      expect(sl<OrdersRepository>(), isA<OrdersRepository>());
+      expect(sl<CartBloc>(), isA<CartBloc>());
+      expect(sl<CheckoutBloc>(), isA<CheckoutBloc>());
+      expect(sl<OrdersBloc>(), isA<OrdersBloc>());
       expect(sl<AppRouter>(), isA<AppRouter>());
     });
 

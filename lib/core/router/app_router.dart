@@ -8,6 +8,9 @@ import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/bloc/auth_state.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/expenses/presentation/screens/expenses_screen.dart';
+import '../../features/orders/domain/entities/order_entity.dart';
+import '../../features/orders/presentation/screens/order_details_screen.dart';
+import '../../features/orders/presentation/screens/orders_screen.dart';
 import '../../features/pos_checkout/presentation/screens/pos_screen.dart';
 import '../../features/products/presentation/bloc/scanner_cubit.dart';
 import '../../features/products/presentation/screens/products_screen.dart';
@@ -55,6 +58,17 @@ class AppRouter {
             GoRoute(
               path: '/pos',
               builder: (context, state) => const PosScreen(),
+            ),
+            GoRoute(
+              path: '/orders',
+              builder: (context, state) => const OrdersScreen(),
+            ),
+            GoRoute(
+              path: '/orders/:id',
+              builder: (context, state) => OrderDetailsScreen(
+                orderId: state.pathParameters['id'] ?? '',
+                initialOrder: state.extra as OrderEntity?,
+              ),
             ),
             GoRoute(
               path: '/products',
