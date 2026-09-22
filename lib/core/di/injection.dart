@@ -30,6 +30,11 @@ import '../../features/sellers/data/datasources/sellers_remote_data_source.dart'
 import '../../features/sellers/data/repositories/sellers_repository_impl.dart';
 import '../../features/sellers/domain/repositories/sellers_repository.dart';
 import '../../features/sellers/presentation/bloc/sellers_bloc.dart';
+import '../../features/analytics/data/datasources/analytics_remote_data_source.dart';
+import '../../features/analytics/data/repositories/analytics_repository_impl.dart';
+import '../../features/analytics/domain/repositories/analytics_repository.dart';
+import '../../features/analytics/presentation/bloc/analytics_bloc.dart';
+import '../../features/analytics/presentation/bloc/my_earnings_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -209,7 +214,34 @@ Future<void> initDependencies({String? baseUrl}) async {
     );
   }
 
-  // 9. Navigation & Router
+  // 9. Feature: Analytics & Earnings
+  if (!sl.isRegistered<AnalyticsRemoteDataSource>()) {
+    sl.registerLazySingleton<AnalyticsRemoteDataSource>(
+      () => AnalyticsRemoteDataSourceImpl(client: sl<DioClient>()),
+    );
+  }
+
+  if (!sl.isRegistered<AnalyticsRepository>()) {
+    sl.registerLazySingleton<AnalyticsRepository>(
+      () => AnalyticsRepositoryImpl(
+        remoteDataSource: sl<AnalyticsRemoteDataSource>(),
+      ),
+    );
+  }
+
+  if (!sl.isRegistered<AnalyticsBloc>()) {
+    sl.registerFactory<AnalyticsBloc>(
+      () => AnalyticsBloc(analyticsRepository: sl<AnalyticsRepository>()),
+    );
+  }
+
+  if (!sl.isRegistered<MyEarningsBloc>()) {
+    sl.registerFactory<MyEarningsBloc>(
+      () => MyEarningsBloc(analyticsRepository: sl<AnalyticsRepository>()),
+    );
+  }
+
+  // 10. Navigation & Router
   if (!sl.isRegistered<AppRouter>()) {
     sl.registerLazySingleton<AppRouter>(
       () => AppRouter(authBloc: sl<AuthBloc>()),

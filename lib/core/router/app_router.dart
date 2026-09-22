@@ -2,6 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/analytics/presentation/bloc/analytics_bloc.dart';
+import '../../features/analytics/presentation/bloc/analytics_event.dart';
+import '../../features/analytics/presentation/bloc/my_earnings_bloc.dart';
+import '../../features/analytics/presentation/bloc/my_earnings_event.dart';
 import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/analytics/presentation/screens/dashboard_screen.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
@@ -53,7 +57,10 @@ class AppRouter {
           routes: [
             GoRoute(
               path: '/dashboard',
-              builder: (context, state) => const DashboardScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<AnalyticsBloc>()..add(const AnalyticsFetchRequested()),
+                child: const DashboardScreen(),
+              ),
             ),
             GoRoute(
               path: '/pos',
@@ -84,11 +91,17 @@ class AppRouter {
             ),
             GoRoute(
               path: '/my-earnings',
-              builder: (context, state) => const MyEarningsScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<MyEarningsBloc>()..add(const MyEarningsFetchRequested()),
+                child: const MyEarningsScreen(),
+              ),
             ),
             GoRoute(
               path: '/analytics',
-              builder: (context, state) => const AnalyticsScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<AnalyticsBloc>()..add(const AnalyticsFetchRequested()),
+                child: const AnalyticsScreen(),
+              ),
             ),
           ],
         ),
