@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/analytics/presentation/screens/dashboard_screen.dart';
@@ -8,9 +9,12 @@ import '../../features/auth/presentation/bloc/auth_state.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/expenses/presentation/screens/expenses_screen.dart';
 import '../../features/pos_checkout/presentation/screens/pos_screen.dart';
+import '../../features/products/presentation/bloc/scanner_cubit.dart';
 import '../../features/products/presentation/screens/products_screen.dart';
+import '../../features/products/presentation/screens/qr_scanner_screen.dart';
 import '../../features/sellers/presentation/screens/my_earnings_screen.dart';
 import '../../features/sellers/presentation/screens/sellers_screen.dart';
+import '../di/injection.dart';
 import '../presentation/main_shell.dart';
 
 /// App router configuration with strict Role-Based Access Control (RBAC) guards.
@@ -30,6 +34,13 @@ class AppRouter {
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/qr-scanner',
+          builder: (context, state) => BlocProvider(
+            create: (_) => sl<ScannerCubit>(),
+            child: const QrScannerScreen(),
+          ),
         ),
         ShellRoute(
           builder: (context, state, child) => MainShell(

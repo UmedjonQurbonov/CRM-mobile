@@ -11,6 +11,11 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/products/data/datasources/products_remote_data_source.dart';
+import '../../features/products/data/repositories/product_repository_impl.dart';
+import '../../features/products/domain/repositories/product_repository.dart';
+import '../../features/products/presentation/bloc/products_bloc.dart';
+import '../../features/products/presentation/bloc/scanner_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -90,7 +95,34 @@ Future<void> initDependencies({String? baseUrl}) async {
     );
   }
 
-  // 5. Navigation & Router
+  // 5. Feature: Products & QR Scanner
+  if (!sl.isRegistered<ProductsRemoteDataSource>()) {
+    sl.registerLazySingleton<ProductsRemoteDataSource>(
+      () => ProductsRemoteDataSourceImpl(client: sl<DioClient>()),
+    );
+  }
+
+  if (!sl.isRegistered<ProductRepository>()) {
+    sl.registerLazySingleton<ProductRepository>(
+      () => ProductRepositoryImpl(
+        remoteDataSource: sl<ProductsRemoteDataSource>(),
+      ),
+    );
+  }
+
+  if (!sl.isRegistered<ProductsBloc>()) {
+    sl.registerFactory<ProductsBloc>(
+      () => ProductsBloc(productRepository: sl<ProductRepository>()),
+    );
+  }
+
+  if (!sl.isRegistered<ScannerCubit>()) {
+    sl.registerFactory<ScannerCubit>(
+      () => ScannerCubit(productRepository: sl<ProductRepository>()),
+    );
+  }
+
+  // 6. Navigation & Router
   if (!sl.isRegistered<AppRouter>()) {
     sl.registerLazySingleton<AppRouter>(
       () => AppRouter(authBloc: sl<AuthBloc>()),

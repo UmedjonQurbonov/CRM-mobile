@@ -34,7 +34,7 @@ abstract final class ApiEndpoints {
   // Products & Inventory
   static const String products = '/api/v1/products';
   static String productById(String id) => '/api/v1/products/$id';
-  static String productByQr(String qr) => '/api/v1/products/qr/$qr';
+  static String productByQr(String qr) => '/api/v1/products/by-qr/$qr';
 
   // Sellers (Owner & Staff)
   static const String sellers = '/api/v1/sellers';

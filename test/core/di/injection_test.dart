@@ -7,6 +7,10 @@ import 'package:crm_mobile/core/storage/token_storage.dart';
 import 'package:crm_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:crm_mobile/features/auth/domain/repositories/auth_repository.dart';
 import 'package:crm_mobile/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:crm_mobile/features/products/data/datasources/products_remote_data_source.dart';
+import 'package:crm_mobile/features/products/domain/repositories/product_repository.dart';
+import 'package:crm_mobile/features/products/presentation/bloc/products_bloc.dart';
+import 'package:crm_mobile/features/products/presentation/bloc/scanner_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -33,6 +37,10 @@ void main() {
       expect(sl.isRegistered<AuthRemoteDataSource>(), isTrue);
       expect(sl.isRegistered<AuthRepository>(), isTrue);
       expect(sl.isRegistered<AuthBloc>(), isTrue);
+      expect(sl.isRegistered<ProductsRemoteDataSource>(), isTrue);
+      expect(sl.isRegistered<ProductRepository>(), isTrue);
+      expect(sl.isRegistered<ProductsBloc>(), isTrue);
+      expect(sl.isRegistered<ScannerCubit>(), isTrue);
       expect(sl.isRegistered<AppRouter>(), isTrue);
 
       expect(sl<TokenStorage>(), isA<TokenStorage>());
@@ -43,6 +51,10 @@ void main() {
       expect(sl<AuthRemoteDataSource>(), isA<AuthRemoteDataSource>());
       expect(sl<AuthRepository>(), isA<AuthRepository>());
       expect(sl<AuthBloc>(), isA<AuthBloc>());
+      expect(sl<ProductsRemoteDataSource>(), isA<ProductsRemoteDataSource>());
+      expect(sl<ProductRepository>(), isA<ProductRepository>());
+      expect(sl<ProductsBloc>(), isA<ProductsBloc>());
+      expect(sl<ScannerCubit>(), isA<ScannerCubit>());
       expect(sl<AppRouter>(), isA<AppRouter>());
     });
 
